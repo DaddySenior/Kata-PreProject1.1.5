@@ -12,15 +12,13 @@ public class Util {
         try {
             Driver driver = new com.mysql.cj.jdbc.Driver();
             DriverManager.registerDriver(driver);
-        } catch (
-                SQLException e) {
+        } catch (SQLException e) {
             throw new RuntimeException(e);
         }
 
         try {
             connection = DriverManager.getConnection(URL, USERNAME, PASSWORD);
             Statement statement = connection.createStatement();
-
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
