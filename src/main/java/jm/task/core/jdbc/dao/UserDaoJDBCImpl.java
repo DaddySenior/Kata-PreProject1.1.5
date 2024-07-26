@@ -9,12 +9,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class UserDaoJDBCImpl implements UserDao {
-    public UserDaoJDBCImpl() {}
+    public UserDaoJDBCImpl() {
+    }
 
     public void createUsersTable() {
         Connection connection = Util.getConnection();
         try (Statement statement = connection.createStatement()) {
-            statement.executeUpdate("CREATE TABLE IF NOT EXISTS users(" + "id INT PRIMARY KEY AUTO_INCREMENT, " + "name VARCHAR(45) NOT NULL, " + "lastname VARCHAR(45) NOT NULL, " + "age INTEGER NOT NULL);");
+            statement.executeUpdate("CREATE TABLE IF NOT EXISTS users(" +
+                    "id INT PRIMARY KEY AUTO_INCREMENT, " +
+                    "name VARCHAR(45) NOT NULL, " +
+                    "lastname VARCHAR(45) NOT NULL, " +
+                    "age INTEGER NOT NULL);");
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -36,6 +41,7 @@ public class UserDaoJDBCImpl implements UserDao {
             ps.setString(2, lastName);
             ps.setByte(3, age);
             ps.execute();
+            System.out.printf("User с именем – %s добавлен в базу данных%n", name);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
