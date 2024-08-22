@@ -2,7 +2,9 @@ package jm.task.core.jdbc.dao;
 
 import jm.task.core.jdbc.model.User;
 import jm.task.core.jdbc.util.Util;
+import org.hibernate.HibernateException;
 import org.hibernate.Session;
+import org.hibernate.Transaction;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -10,6 +12,10 @@ import java.sql.Statement;
 import java.util.List;
 
 public class UserDaoHibernateImpl implements UserDao {
+
+    private static Transaction transaction;
+
+
     public UserDaoHibernateImpl() {
 
     }
@@ -49,6 +55,8 @@ public class UserDaoHibernateImpl implements UserDao {
             session.save(new User(name, lastName, age));
             session.getTransaction().commit();
             System.out.printf("User с именем – %s добавлен в базу данных%n", name);
+        } catch (HibernateException e) {
+            transaction.rollback();
         }
     }
 
@@ -59,6 +67,8 @@ public class UserDaoHibernateImpl implements UserDao {
             User user = session.get(User.class, id);
             session.delete(user);
             session.getTransaction().commit();
+        } catch (HibernateException e) {
+            transaction.rollback();
         }
     }
 
@@ -72,7 +82,6 @@ public class UserDaoHibernateImpl implements UserDao {
         }
         return userList;
     }
-
 
     @Override
     public void cleanUsersTable() {
